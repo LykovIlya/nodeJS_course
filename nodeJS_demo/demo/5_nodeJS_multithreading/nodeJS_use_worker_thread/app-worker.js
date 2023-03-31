@@ -1,9 +1,9 @@
-const { worker } = require('worker_threads');
+const { Worker } = require('worker_threads');
 
 
 const compute = (array) => {
 	return new Promise((resolve, reject) => {
-		const worker = new Worker('./worker.js', {
+		let worker = new Worker(`${__dirname}/worker.js`, {
 			workerData: {
 				array
 			}
@@ -36,8 +36,8 @@ const main = async () => {
 		performance.mark("end");
 		performance.measure("main", "start", "end");
 		console.log(performance.getEntriesByName("main").pop());
-	} catch (e) {
-		console.log(e.message);
+	} catch (err) {
+		console.log(err.stack);
 	}
 };
 main();
