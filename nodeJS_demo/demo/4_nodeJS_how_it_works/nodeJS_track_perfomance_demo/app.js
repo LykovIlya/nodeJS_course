@@ -4,10 +4,9 @@ test = perf_hooks.performance.timerify(test);
 
 const perfomanceObserver = new perf_hooks.PerformanceObserver((items, observer) => {
 	// console.log(items.getEntries());
-	const entrySlow = items.getEntriesByName("slow").pop();
-	const entryTest = items.getEntriesByName("test").pop();
-	console.log(`${entrySlow.name}: ${entrySlow.duration} ms`);
-	console.log(`${entryTest.name}: ${entryTest.duration} ms`);
+	items.getEntries().forEach((entry) => {
+		console.log(`${entry.name}: ${entry.duration}`);
+	});
 
 	observer.disconnect();
 });

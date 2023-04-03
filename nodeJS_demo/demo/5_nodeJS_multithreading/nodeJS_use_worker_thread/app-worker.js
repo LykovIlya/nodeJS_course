@@ -8,22 +8,27 @@ const compute = (array) => {
 				array
 			}
 		});
+		console.log("Вход в worker:" + worker.threadId);
 		worker.on("message", (message) => {
-			console.log(worker.threadId);
+			console.log("message event:" + worker.threadId);
 			resolve(message);
 		});
-
 		worker.on("error", (err) => {
 			reject(err);
 		});
 
+		worker.on("online", () => {
+			console.log("online event:" + worker.threadId);
+		});
+
 		worker.on("exit", () => {
-			console.log("Завершил работу");
+			console.log("exit event: worker" + " Завершил работу");
 		});
 	});
 };
 
 const main = async () => {
+	console.log("main started");
 	try {
 		performance.mark("start");
 		const result = await Promise.all([
@@ -32,6 +37,8 @@ const main = async () => {
 			compute([25, 20, 19, 48, 30, 50]),
 			compute([25, 20, 19, 48, 30, 50])
 		]);
+		console.log("return Promise.all");
+
 		console.log(result);
 		performance.mark("end");
 		performance.measure("main", "start", "end");
